@@ -168,10 +168,10 @@ a{color:var(--acento)}
 a:focus-visible{outline:3px solid var(--acento);outline-offset:2px}
 .aviso{background:var(--aviso);border-left:5px solid #c9962b;padding:.7rem 1rem;margin:1rem 0;font-family:system-ui,sans-serif;font-size:.95rem}
 .meta{color:var(--suave);font-family:system-ui,sans-serif;font-size:.92rem}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0;margin:1.5rem 0;border-block:2px solid var(--tinta)}
-.kpi{padding:1rem 1rem 1.1rem 0}
+.kpis{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,2fr) minmax(0,1.4fr) minmax(0,1fr);gap:0;margin:1.5rem 0;border-block:2px solid var(--tinta)}
+.kpi{padding:1rem 1rem 1.1rem 0;min-width:0}
 .kpi+.kpi{padding-left:1rem;border-left:1px solid var(--linea)}
-.kpi strong{display:block;font-size:1.7rem;line-height:1.15;font-variant-numeric:tabular-nums}
+.kpi strong{display:block;font-size:clamp(1.25rem,2.6vw,1.7rem);line-height:1.15;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .kpi span{font-family:system-ui,sans-serif;font-size:.88rem;color:var(--suave)}
 .nota{font-family:system-ui,sans-serif;font-size:.88rem;color:var(--suave);max-width:70ch}
 .barras{list-style:none;margin:0;padding:0;font-family:system-ui,sans-serif;font-size:.9rem}
@@ -190,6 +190,8 @@ footer{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--linea)}
  .barras li{grid-template-columns:1fr;gap:.1rem}.valor{text-align:left}
  .kpi+.kpi{border-left:0;padding-left:0;border-top:1px solid var(--linea)}
 }
+@media (max-width:860px){.kpis{grid-template-columns:1fr 1fr}.kpi:nth-child(3){padding-left:0;border-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--linea)}}
+@media (max-width:640px){.kpis{grid-template-columns:1fr}.kpi,.kpi:nth-child(n){padding-left:0;border-left:0}.kpi+.kpi{border-top:1px solid var(--linea)}}
 """
 
 
@@ -271,3 +273,4 @@ if __name__ == "__main__":
     except (ErrorDatos, FileNotFoundError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         sys.exit(1)
+        
