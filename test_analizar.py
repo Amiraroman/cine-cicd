@@ -69,6 +69,18 @@ class PruebasAnalizar(unittest.TestCase):
             with self.assertRaises(analizar.ErrorDatos, msg=malo):
                 analizar.validar_y_convertir(CABECERA, filas((malo, "tt1", "A", "1", "1")))
 
+    def test_rechaza_year_fuera_de_rango(self):
+        for fuera in ("20133", "1887", "2101", "1"):
+            with self.assertRaises(analizar.ErrorDatos, msg=fuera) as ctx:
+                analizar.validar_y_convertir(CABECERA, filas((fuera, "tt1", "A", "1", "1")))
+            self.assertIn("year", str(ctx.exception))
+            self.assertIn("rango", str(ctx.exception))
+
+    def test_acepta_year_en_los_limites(self):
+        for valido in ("1888", "2013", "2100"):
+            peliculas = analizar.validar_y_convertir(CABECERA, filas((valido, "tt1", "A", "1", "1")))
+            self.assertEqual(peliculas[0]["year"], int(valido))
+
     def test_rechaza_numeros_no_finitos(self):
         for malo in ("nan", "inf", "abc"):
             with self.assertRaises(analizar.ErrorDatos, msg=malo):

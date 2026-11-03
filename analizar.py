@@ -19,6 +19,7 @@ TITULO = "Cine: taquilla histórica de 1794 películas"
 RUTA_CSV = os.path.join("datos", "movies.csv")
 RUTA_SALIDA = os.path.join("public", "index.html")
 COLUMNAS_OBLIGATORIAS = ["imdb", "title", "year", "budget", "domgross"]
+ANIO_MINIMO, ANIO_MAXIMO = 1888, 2100  # primera película conocida hasta un límite razonable
 FALTANTES = {"", "NA", "#N/A"}  # el CSV original usa #N/A además de NA
 
 FUENTE_URL = "https://github.com/fivethirtyeight/data/tree/master/bechdel"
@@ -106,6 +107,11 @@ def validar_y_convertir(columnas, filas):
         anio_txt = (fila["year"] or "").strip()
         if not anio_txt.isascii() or not anio_txt.isdigit() or int(anio_txt) <= 0:
             raise ErrorDatos(f"Fila {n}, columna year: {fila['year']!r} no es un entero positivo.")
+        if not ANIO_MINIMO <= int(anio_txt) <= ANIO_MAXIMO:
+            raise ErrorDatos(
+                f"Fila {n}, columna year: {anio_txt} está fuera del rango permitido "
+                f"({ANIO_MINIMO} a {ANIO_MAXIMO})."
+            )
 
         peliculas.append({
             "imdb": imdb,
@@ -273,4 +279,3 @@ if __name__ == "__main__":
     except (ErrorDatos, FileNotFoundError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         sys.exit(1)
-        
